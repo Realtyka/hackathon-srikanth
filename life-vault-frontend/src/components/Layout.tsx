@@ -29,6 +29,7 @@ import {
   Shield as ShieldIcon,
   Close as CloseIcon,
   PlayCircleOutline as DemoIcon,
+  History as HistoryIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -38,6 +39,7 @@ const baseMenuItems = [
   { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
   { text: 'Assets', icon: <AssetsIcon />, path: '/assets' },
   { text: 'Trusted Contacts', icon: <ContactsIcon />, path: '/contacts' },
+  { text: 'Activity Log', icon: <HistoryIcon />, path: '/activity-log' },
   { text: 'Settings', icon: <SettingsIcon />, path: '/settings' },
 ];
 

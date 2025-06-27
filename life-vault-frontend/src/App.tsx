@@ -10,6 +10,7 @@ import Contacts from './pages/Contacts';
 import Settings from './pages/Settings';
 import ActivityVerification from './pages/ActivityVerification';
 import Demo from './pages/Demo';
+import ActivityLog from './pages/ActivityLog';
 
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -41,6 +42,7 @@ function App() {
         <Route path="contacts" element={<Contacts />} />
         <Route path="settings" element={<Settings />} />
         <Route path="demo" element={<Demo />} />
+        <Route path="activity-log" element={<ActivityLog />} />
       </Route>
     </Routes>
   );

@@ -1,0 +1,12 @@
+# Demo profile configuration
+logging:
+  level:
+    com.lifevault: DEBUG
+    com.lifevault.scheduler: DEBUG
+    com.lifevault.service.EmailService: DEBUG
+    org.springframework.security: DEBUG
+
+# Show SQL queries in demo mode
+spring:
+  jpa:
+    show-sql: true

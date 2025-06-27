@@ -26,7 +26,7 @@ import {
   CheckCircle,
   Warning,
 } from '@mui/icons-material';
-import { api } from '../services/api';
+import api from '../services/api';
 
 interface DemoStatus {
   demoMode: boolean;
@@ -78,7 +78,7 @@ const Demo: React.FC = () => {
   const simulateInactivity = async () => {
     setLoading(true);
     try {
-      const response = await api.post(`/demo/simulate-inactivity?daysInactive=${daysInactive}`);
+      await api.post(`/demo/simulate-inactivity?daysInactive=${daysInactive}`);
       setMessage({ type: 'success', text: `Simulated ${daysInactive} days of inactivity` });
       await fetchStatus();
     } catch (error) {

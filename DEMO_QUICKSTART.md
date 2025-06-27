@@ -79,10 +79,10 @@ UPDATE users SET last_activity_date = CURRENT_DATE - INTERVAL '135 days' WHERE e
 
 ## 🔧 Troubleshooting
 
-### No emails received?
-1. Check spam folder
-2. Verify email settings in docker-compose-local.yml
-3. Check logs: `docker logs life-vault-backend-1`
+### Demo Mode Notes:
+1. **Emails are disabled in demo mode** - Check logs instead
+2. View simulated notifications: `docker logs life-vault-backend-1 | grep DEMO`
+3. Activity logs show what would happen in production
 
 ### Demo menu not visible?
 - Only appears when running on localhost
