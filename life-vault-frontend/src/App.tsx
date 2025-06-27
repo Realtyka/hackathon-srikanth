@@ -9,6 +9,7 @@ import Assets from './pages/Assets';
 import Contacts from './pages/Contacts';
 import Settings from './pages/Settings';
 import ActivityVerification from './pages/ActivityVerification';
+import Demo from './pages/Demo';
 
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -39,6 +40,7 @@ function App() {
         <Route path="assets" element={<Assets />} />
         <Route path="contacts" element={<Contacts />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="demo" element={<Demo />} />
       </Route>
     </Routes>
   );

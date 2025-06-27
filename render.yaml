@@ -2,10 +2,10 @@ services:
   # Backend Web Service
   - type: web
     name: life-vault-backend
-    runtime: java
+    runtime: docker
     rootDir: life-vault-backend
-    buildCommand: ./mvnw clean install -DskipTests
-    startCommand: java -Dspring.profiles.active=render -jar target/life-vault-backend-1.0.0.jar
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: render

@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:lifevault}?sslmode=disable
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:password}
+    
+cors:
+  allowed-origins: ${CORS_ORIGINS:http://localhost:3000}
+  
+jwt:
+  secret: ${JWT_SECRET:this-is-a-very-long-secret-key-for-local-development-that-is-at-least-512-bits-64-chars}
+  
+encryption:
+  key: ${ENCRYPTION_KEY:local-encryption-key-32chars-min}

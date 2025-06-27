@@ -19,24 +19,31 @@ import {
   TextField,
   Grid,
   Alert,
+  useTheme,
+  useMediaQuery,
+  Hidden,
 } from '@mui/material';
 import {
-  Add as AddIcon,
   Delete as DeleteIcon,
   CheckCircle as VerifiedIcon,
   Email as EmailIcon,
   Phone as PhoneIcon,
   LocationOn as LocationIcon,
+  PersonAdd as PersonAddIcon,
+  Security as SecurityIcon,
 } from '@mui/icons-material';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import api from '../services/api';
 import { TrustedContact } from '../types';
+import { ContactsMobile } from './ContactsMobile';
 
 const Contacts: React.FC = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const queryClient = useQueryClient();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const { data: contacts = [], isLoading } = useQuery<TrustedContact[]>(
     'contacts',
@@ -83,24 +90,66 @@ const Contacts: React.FC = () => {
 
   return (
     <Box>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h4">Trusted Contacts</Typography>
+      {/* Header */}
+      <Box
+        display="flex"
+        flexDirection={{ xs: 'column', sm: 'row' }}
+        justifyContent="space-between"
+        alignItems={{ xs: 'flex-start', sm: 'center' }}
+        gap={2}
+        mb={4}
+      >
+        <Box>
+          <Typography variant="h4" fontWeight={700} gutterBottom>
+            Trusted Contacts
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            People who can access your vault if you become inactive
+          </Typography>
+        </Box>
         <Button
           variant="contained"
-          startIcon={<AddIcon />}
+          startIcon={<PersonAddIcon />}
           onClick={handleOpenDialog}
+          size={isMobile ? 'medium' : 'large'}
+          sx={{ minWidth: 160 }}
         >
           Add Contact
         </Button>
       </Box>
 
-      <Alert severity="info" sx={{ mb: 3 }}>
-        Trusted contacts will receive access to your asset information if you become 
-        inactive for your specified period (default: 6 months). They will NOT be 
-        notified when you add them - they'll only be contacted if needed.
+      {/* Privacy Notice */}
+      <Alert
+        severity="info"
+        icon={<SecurityIcon />}
+        sx={{
+          mb: 4,
+          borderRadius: 2,
+          backgroundColor: theme.palette.info.light + '20',
+          border: `1px solid ${theme.palette.info.main}40`,
+        }}
+      >
+        <Typography variant="body2" fontWeight={500} gutterBottom>
+          Complete Privacy Protection
+        </Typography>
+        <Typography variant="body2">
+          Contacts will NOT be notified when added. They'll only be contacted if you 
+          become inactive for your specified period (default: 6 months).
+        </Typography>
       </Alert>
 
-      <TableContainer component={Paper}>
+      {/* Mobile View */}
+      <Hidden mdUp>
+        <ContactsMobile
+          contacts={contacts}
+          onDelete={handleDelete}
+          isLoading={isLoading}
+        />
+      </Hidden>
+
+      {/* Desktop Table View */}
+      <Hidden mdDown>
+        <TableContainer component={Paper} sx={{ borderRadius: 2 }}>
         <Table>
           <TableHead>
             <TableRow>
@@ -129,11 +178,13 @@ const Contacts: React.FC = () => {
             ) : (
               contacts.map((contact) => (
                 <TableRow key={contact.id}>
-                  <TableCell>{contact.name}</TableCell>
+                  <TableCell>
+                    <Typography fontWeight={500}>{contact.name}</Typography>
+                  </TableCell>
                   <TableCell>
                     <Box display="flex" alignItems="center" gap={1}>
                       <EmailIcon fontSize="small" color="action" />
-                      {contact.email}
+                      <Typography variant="body2">{contact.email}</Typography>
                     </Box>
                   </TableCell>
                   <TableCell>
@@ -180,6 +231,7 @@ const Contacts: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      </Hidden>
 
       <AddContactDialog
         open={openDialog}
