@@ -1,0 +1,67 @@
+databases:
+  - name: lifevault-db
+    databaseName: lifevault
+    user: lifevault
+    plan: free
+
+services:
+  - type: web
+    name: lifevault-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile.render
+    repo: https://github.com/YOUR_USERNAME/life-vault
+    rootDir: life-vault-backend
+    plan: free
+    envVars:
+      - key: DB_HOST
+        fromDatabase:
+          name: lifevault-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: lifevault-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: lifevault-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: lifevault-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: lifevault-db
+          property: password
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ENCRYPTION_KEY
+        generateValue: true
+      - key: MAIL_USERNAME
+        sync: false
+      - key: MAIL_PASSWORD
+        sync: false
+      - key: CORS_ORIGINS
+        value: https://lifevault-frontend.onrender.com
+      - key: SERVER_PORT
+        value: 8080
+    healthCheckPath: /actuator/health
+    
+  - type: web
+    name: lifevault-frontend
+    runtime: static
+    repo: https://github.com/YOUR_USERNAME/life-vault
+    rootDir: life-vault-frontend
+    plan: free
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://lifevault-backend.onrender.com
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff

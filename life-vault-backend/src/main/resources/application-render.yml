@@ -1,0 +1,74 @@
+spring:
+  application:
+    name: life-vault
+  
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=require
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+      connection-timeout: 20000
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+    show-sql: false
+  
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: always
+    properties:
+      org:
+        quartz:
+          threadPool:
+            threadCount: 5
+
+server:
+  port: ${PORT:8080}
+  forward-headers-strategy: framework
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 86400000 # 24 hours
+
+encryption:
+  key: ${ENCRYPTION_KEY}
+
+aws:
+  region: ${AWS_REGION:us-east-1}
+  sns:
+    enabled: ${SNS_ENABLED:false}
+
+inactivity:
+  check-interval-days: 30
+  warning-period-days: 180 # 6 months
+  grace-period-days: 30
+
+cors:
+  allowed-origins: ${CORS_ORIGINS:https://lifevault-frontend.onrender.com}
+
+logging:
+  level:
+    com.lifevault: INFO
+    org.springframework.security: WARN
+    root: WARN

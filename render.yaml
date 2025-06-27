@@ -1,0 +1,53 @@
+services:
+  # Backend Web Service
+  - type: web
+    name: life-vault-backend
+    runtime: java
+    rootDir: life-vault-backend
+    buildCommand: ./mvnw clean install -DskipTests
+    startCommand: java -Dspring.profiles.active=render -jar target/life-vault-backend-1.0.0.jar
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: render
+      - key: DB_HOST
+        fromDatabase:
+          name: life-vault-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: life-vault-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: life-vault-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: life-vault-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: life-vault-db
+          property: password
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ENCRYPTION_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: https://life-vault-frontend.onrender.com
+
+  # Frontend Static Site
+  - type: web
+    name: life-vault-frontend
+    runtime: static
+    rootDir: life-vault-frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://life-vault-backend.onrender.com/api
+
+databases:
+  - name: life-vault-db
+    plan: free
+    ipAllowList: []

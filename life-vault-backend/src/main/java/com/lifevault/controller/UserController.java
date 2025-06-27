@@ -1,0 +1,73 @@
+package com.lifevault.controller;
+
+import com.lifevault.dto.ChangePasswordRequest;
+import com.lifevault.dto.UpdateProfileRequest;
+import com.lifevault.dto.UserSettingsRequest;
+import com.lifevault.entity.User;
+import com.lifevault.service.UserService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/users")
+@CrossOrigin
+public class UserController {
+    
+    @Autowired
+    private UserService userService;
+    
+    @GetMapping("/profile")
+    public ResponseEntity<Map<String, Object>> getUserProfile(Authentication authentication) {
+        User user = userService.getUserByEmail(authentication.getName());
+        
+        Map<String, Object> profile = new HashMap<>();
+        profile.put("id", user.getId());
+        profile.put("email", user.getEmail());
+        profile.put("firstName", user.getFirstName());
+        profile.put("lastName", user.getLastName());
+        profile.put("phoneNumber", user.getPhoneNumber());
+        profile.put("inactivityPeriodDays", user.getInactivityPeriodDays());
+        profile.put("lastActivityAt", user.getLastActivityAt());
+        
+        return ResponseEntity.ok(profile);
+    }
+    
+    @PutMapping("/profile")
+    public ResponseEntity<Map<String, String>> updateProfile(
+            Authentication authentication,
+            @Valid @RequestBody UpdateProfileRequest request) {
+        userService.updateProfile(authentication.getName(), request);
+        
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Profile updated successfully");
+        return ResponseEntity.ok(response);
+    }
+    
+    @PostMapping("/change-password")
+    public ResponseEntity<Map<String, String>> changePassword(
+            Authentication authentication,
+            @Valid @RequestBody ChangePasswordRequest request) {
+        userService.changePassword(authentication.getName(), request);
+        
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Password changed successfully");
+        return ResponseEntity.ok(response);
+    }
+    
+    @PutMapping("/settings")
+    public ResponseEntity<Map<String, String>> updateSettings(
+            Authentication authentication,
+            @Valid @RequestBody UserSettingsRequest request) {
+        userService.updateSettings(authentication.getName(), request);
+        
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Settings updated successfully");
+        return ResponseEntity.ok(response);
+    }
+}
